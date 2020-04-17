@@ -53,4 +53,4 @@ Not 100% of the romset is playable yet, because the algorithm is over.
 
 # Result
 
-![Me playing](https://ibb.co/kS5gVFD)
+![Me playing](https://raw.githubusercontent.com/aluzed/MiSTer-Neogeo-Rom-Decrypter/master/preview.jpg)
