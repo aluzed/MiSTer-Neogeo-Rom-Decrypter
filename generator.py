@@ -1,7 +1,7 @@
-##############################################
-# Darksoft Neogeo Romset Generator by Aluzed #
-# 2020                                       #
-##############################################
+#######################################
+# Darksoft Romset Generator by Aluzed #
+# 2020                                #
+#######################################
 
 import os
 import sys
@@ -81,6 +81,7 @@ def copy_file(source, dest):
 
 def convert_roms():
   global s_rom
+  global m1_rom
   
   print('start rom conversion for ' + dir_path)
 
