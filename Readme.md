@@ -32,7 +32,7 @@ Here is the file organisation (line per line) :
 <SHA256> <filename> <SHA1> <MD5> <CRC>
 ```
 
-If your checksum match with the DB file, then your rom is well generated.
+If your checksum matches with the DB file, then your rom is well generated.
 
 For the FPGA file, it contains the key of the starting index. For any game you convert, you must have a fpga file in your rom folder. 
 Now to figure out what is the index for your current rom, check the **"Darksoft Neo Geo SMDB.txt"** file, look at the current rom **fpga** file line.
