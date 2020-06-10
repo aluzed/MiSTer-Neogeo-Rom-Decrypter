@@ -41,7 +41,7 @@ Then grab your md5 hash for your **fpga** file.
 Now use a reverse MD5 database (on Google or whatever) and paste your MD5 hash, you should get the key (it looks like "10" or "25"... it is a number).
 Just create your **fpga** file with the number inside.
 
-The you are ready to go, copy/paste your folder to your SD card.
+There you are ready to go, copy/paste your folder to your SD card.
 
 # Finally
 
