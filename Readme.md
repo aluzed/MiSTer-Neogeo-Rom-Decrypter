@@ -49,7 +49,7 @@ Add a line into your **romset.xml** corresponding to the **romset.sample.xml** l
 
 # Warning
 
-Not 100% of the romset is playable yet, because the algorithm is not over.
+Not 100% of the romset is playable yet, because the algorithm is 100% accurate.
 
 # Result
 
