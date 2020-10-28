@@ -12,7 +12,7 @@ Don't forget to rename the folder, to the correct game name as in **romset.sampl
 
 # Tools
 
-I added another python tool that is get_hash.py, to check the game checksum and see if everything is ok.
+I added another python tool that is get_hash.py, to check the game checksum on generated files to see if everything is ok.
 
 How to use 
 
