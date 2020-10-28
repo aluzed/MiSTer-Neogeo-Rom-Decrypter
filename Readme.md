@@ -8,7 +8,7 @@ python.exe (or python3 on linux/mac) generator.py
 ```
 
 It generates an extract folder, that you can add to your MiSTer-FPGA SD card.
-Don't forget to rename the folder, to the correct game name in **romset.sample.xml**
+Don't forget to rename the folder, to the correct game name as in **romset.sample.xml**
 
 # Tools
 
