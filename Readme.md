@@ -1,56 +1,146 @@
-# Darksoft Neogeo Rom generator for MiSTer-FPGA by Aluzed
+# Darksoft Neogeo Rom generator for MiSTer-FPGA
 
-Use decrypted **NeorageX** rom to get it working. 
+Convert a MAME (or NeoRageX) NeoGeo romset into the Darksoft format expected by
+the MiSTer FPGA NeoGeo core.
 
-Unzip the rom, add **generator.py** to the folder and execute with python : 
-```
-python.exe (or python3 on linux/mac) generator.py
-```
+Originally written by **Aluzed** in 2020 as a single-file script
+(`generator.py`). This repository now ships a packaged CLI, `darksoft-gen`,
+that produces bit-identical output files *and* auto-resolves the `fpga` key
+plus verifies every artifact against the Darksoft SMDB.
 
-It generates an extract folder, that you can add to your MiSTer-FPGA SD card.
-Don't forget to rename the folder, to the correct game name as in **romset.sample.xml**
+## Install
 
-# Tools
+Requires Python 3.10 or newer.
 
-I added another python tool that is get_hash.py, to check the game checksum on generated files to see if everything is ok.
-
-How to use 
+With [pipx](https://pypa.github.io/pipx/) (recommended — isolates deps):
 
 ```
-python.exe get_hash.py <algo> <filename>
+pipx install git+https://github.com/aluzed/MiSTer-Neogeo-Rom-Decrypter
 ```
 
-List of available algo(in lower case) : 
-* sha256
-* sha1 
-* md5
+Or with [uv](https://docs.astral.sh/uv/):
 
-Compare your checksum with the one in **"Darksoft Neo Geo SMDB.txt"** file that I grabbed from Everdrive github.
-
-Here is the file organisation (line per line) : 
 ```
-<SHA256> <filename> <SHA1> <MD5> <CRC>
+uv tool install git+https://github.com/aluzed/MiSTer-Neogeo-Rom-Decrypter
 ```
 
-If your checksum matches with the DB file, then your rom is well generated.
+Or from a local clone:
 
-For the FPGA file, it contains the key of the starting index. For any game you convert, you must have a fpga file in your rom folder. 
-Now to figure out what is the index for your current rom, check the **"Darksoft Neo Geo SMDB.txt"** file, look at the current rom **fpga** file line.
-Then grab your md5 hash for your **fpga** file. 
+```
+git clone https://github.com/aluzed/MiSTer-Neogeo-Rom-Decrypter
+pipx install ./MiSTer-Neogeo-Rom-Decrypter
+```
 
-Now use a reverse MD5 database (on Google or whatever) and paste your MD5 hash, you should get the key (it looks like "10" or "25"... it is a number).
-Just create your **fpga** file with the number inside.
+## Quickstart
 
-There you are ready to go, copy/paste your folder to your SD card.
+1. Unzip a decrypted NeoRageX / MAME romset into a folder named after the
+   Darksoft short-name of the game (e.g. `2020bb/`, `mslug/`, `aof3/` — see
+   `romset.sample.xml` for the full list).
+2. `cd` into that folder.
+3. Run `darksoft-gen`.
 
-# Finally
+```
+cd 2020bb
+darksoft-gen
+```
 
-Add a line into your **romset.xml** corresponding to the **romset.sample.xml** line of your rom.
+Output lands in `./export/` and contains the six files the Darksoft flash cart
+expects: `srom`, `m1rom`, `crom0`, `vroma0`, `prom`, `fpga`. Copy the directory
+(renamed to the game short-name) to your MiSTer SD card under
+`NeoGeo/games/<short-name>/`, and add the corresponding line from
+`romset.sample.xml` to your `romset.xml`.
 
-# Warning
+### Sample session
 
-Not 100% of the romset is playable yet, because the algorithm is not 100% accurate.
+```
+$ cd 2020bb
+$ darksoft-gen
+Scanning: /home/you/neogeo/2020bb
+Building for game '2020bb' into: /home/you/neogeo/2020bb/export
+Generated artifacts:
+  srom          131072 bytes  md5=455d71dffa67694d9ae7629e77ea37c6
+  m1rom         131072 bytes  md5=293ea5de05ef9d43264bd676aed68711
+  crom0        8388608 bytes  md5=b30cd4e6b0bb0732e1b7b8f70105cf7a
+  vroma0       2097152 bytes  md5=38f3a1e7e6c2bc6b46103e3e3c5a20de
+  prom         2097152 bytes  md5=b056f384deb2fb20af12dd0a56246bf6
+  fpga               2 bytes  md5=c51ce410c124a10e0db5e4b97fc2af39
+Verification against SMDB:
+  OK       srom    md5=455d71dffa67694d9ae7629e77ea37c6
+  OK       m1rom   md5=293ea5de05ef9d43264bd676aed68711
+  OK       crom0   md5=b30cd4e6b0bb0732e1b7b8f70105cf7a
+  OK       vroma0  md5=38f3a1e7e6c2bc6b46103e3e3c5a20de
+  OK       prom    md5=b056f384deb2fb20af12dd0a56246bf6
+  OK       fpga    md5=c51ce410c124a10e0db5e4b97fc2af39
+```
 
-# Result
+Exit code is `0` when every artifact matches the SMDB, `1` otherwise.
+
+## What's new vs. the 2020 script
+
+* **Auto-resolved `fpga` file.** The `fpga` file is an ASCII decimal key
+  (e.g. `b"13"`) whose MD5 is declared in the Darksoft SMDB. The original
+  required users to reverse-lookup that MD5 on an external website. The CLI
+  now brute-forces the `[0, 255]` search space locally and writes the file
+  for you. Use `--no-fpga` to opt out.
+* **Post-build verification.** Every generated artifact is MD5-compared
+  against the bundled `Darksoft Neo Geo SMDB.txt`. A mismatch exits non-zero
+  — turning the tool into a test bench: if the hashes match but a game is
+  broken in-core, it's a core bug rather than a conversion bug. Use
+  `--no-verify` to opt out.
+* **Proper CLI.** Argument parsing via `argparse`; no more editing
+  `sys.argv[1]` in the script or dropping `generator.py` inside the romset
+  folder.
+* **Installable package.** `pipx install ...` instead of copying a script.
+  The SMDB is bundled inside the wheel.
+
+## Options
+
+```
+darksoft-gen [--dir PATH] [--game NAME] [--smdb PATH] [--out PATH]
+             [--no-fpga] [--no-verify]
+```
+
+| Flag          | Default                        | Meaning                                                         |
+|---------------|--------------------------------|-----------------------------------------------------------------|
+| `--dir`       | current working directory      | Source folder holding the MAME / NeoRageX romset.               |
+| `--game`      | basename of `--dir`            | Darksoft short-name, used for SMDB lookup and `fpga` resolution.|
+| `--smdb`      | bundled SMDB                   | Override to use a newer or patched SMDB file.                   |
+| `--out`       | `<dir>/export`                 | Destination for the six generated artifacts.                    |
+| `--no-fpga`   | off                            | Skip writing the `fpga` file.                                   |
+| `--no-verify` | off                            | Skip the SMDB comparison step.                                  |
+
+Supported ROM filename conventions:
+
+* MAME:     `<game>-s1.rom`, `<game>_p1.bin`, `<game>-c2.rom`, ...
+* NeoRageX: `<game>.s1`, `<game>.p1`, `<game>.c2`, ...
+
+## As a library
+
+The package is importable too, in case you want to plug pieces into another
+tool:
+
+```python
+from pathlib import Path
+from darksoft_gen import (
+    scan_directory, build, verify,
+    parse_smdb, bundled_smdb_path, resolve_fpga,
+)
+
+romset = scan_directory(Path("./2020bb"))
+entries = parse_smdb(bundled_smdb_path())
+fpga = resolve_fpga(entries["2020bb"]["fpga"].md5)
+report = build(romset, Path("./2020bb/export"), fpga_bytes=fpga)
+for result in verify(report, entries["2020bb"]):
+    print(result)
+```
+
+## Caveats
+
+Not 100% of the Darksoft romset is playable yet — some games still don't
+boot even with correctly-hashed artifacts. Those are core-side issues
+rather than conversion issues (the verification step makes that
+distinction explicit).
+
+## Result
 
 ![Me playing](https://raw.githubusercontent.com/aluzed/MiSTer-Neogeo-Rom-Decrypter/master/preview.jpg)
