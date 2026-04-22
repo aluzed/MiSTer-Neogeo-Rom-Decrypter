@@ -4,10 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from darksoft_gen.smdb import SmdbEntry, parse_smdb
-
-REPO_ROOT = Path(__file__).resolve().parent.parent
-REAL_SMDB = REPO_ROOT / "Darksoft Neo Geo SMDB.txt"
+from darksoft_gen.smdb import SmdbEntry, bundled_smdb_path, parse_smdb
 
 
 def test_parse_minimal(tmp_path: Path) -> None:
@@ -55,9 +52,10 @@ def test_parse_skips_malformed_and_non_games(tmp_path: Path) -> None:
 
 
 def test_parse_real_smdb_smoke() -> None:
-    assert REAL_SMDB.exists(), f"fixture missing: {REAL_SMDB}"
+    smdb_path = bundled_smdb_path()
+    assert smdb_path.exists(), f"bundled SMDB missing: {smdb_path}"
 
-    entries = parse_smdb(REAL_SMDB)
+    entries = parse_smdb(smdb_path)
 
     assert "2020bb" in entries
     game = entries["2020bb"]

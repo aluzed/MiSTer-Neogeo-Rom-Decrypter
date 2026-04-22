@@ -18,10 +18,23 @@ consume here).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from importlib.resources import as_file, files
 from pathlib import Path
 
 _PATH_PREFIX = "Darksoft Neo Geo/games/"
 _CATEGORIES = frozenset({"srom", "m1rom", "crom0", "vroma0", "prom", "fpga"})
+
+
+def bundled_smdb_path() -> Path:
+    """Path to the SMDB shipped inside the package.
+
+    The SMDB is installed under ``darksoft_gen/data/smdb.txt``. For editable
+    installs this resolves to the source tree; for wheel installs it
+    resolves to the extracted package dir.
+    """
+    resource = files("darksoft_gen").joinpath("data/smdb.txt")
+    with as_file(resource) as p:
+        return Path(p)
 
 
 @dataclass(frozen=True)
