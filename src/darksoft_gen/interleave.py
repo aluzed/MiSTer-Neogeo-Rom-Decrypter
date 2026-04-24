@@ -1,7 +1,8 @@
 """Pure interleaving primitives for Darksoft CROM generation.
 
-The Darksoft CROM format expects pairs of MAME C-ROMs to be interleaved 2 bytes
-at a time (c1/c2, c3/c4, ...) and the resulting pair-blocks concatenated.
+The Darksoft CROM format expects pairs of individual C-ROM files to be
+interleaved 2 bytes at a time (c1/c2, c3/c4, ...) and the resulting
+pair-blocks concatenated.
 See the original `generator.py` (functions `join_crom0` and `split_per2`) for
 the historical implementation this module reproduces behavior-identically.
 """

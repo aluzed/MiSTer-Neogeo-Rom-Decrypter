@@ -16,7 +16,7 @@ from .verify import VerifyResult, verify
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="darksoft-gen",
-        description="Convert a MAME/NeoRageX NeoGeo romset to the Darksoft format.",
+        description="Convert a decrypted NeoRageX NeoGeo romset to the Darksoft format.",
     )
     parser.add_argument(
         "--dir",

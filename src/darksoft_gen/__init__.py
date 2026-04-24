@@ -1,4 +1,4 @@
-"""Convert MAME/NeoRageX NeoGeo romsets into the Darksoft format."""
+"""Convert decrypted NeoRageX NeoGeo romsets into the Darksoft format."""
 
 from .builder import BuildArtifact, BuildReport, build
 from .fpga_solver import resolve_fpga

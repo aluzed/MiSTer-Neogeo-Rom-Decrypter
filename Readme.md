@@ -1,7 +1,7 @@
 # Darksoft Neogeo Rom generator for MiSTer-FPGA by Aluzed
 
-Convert a MAME (or NeoRageX) NeoGeo romset into the Darksoft format expected by
-the MiSTer FPGA NeoGeo core.
+Convert a **decrypted NeoRageX** NeoGeo romset into the Darksoft format
+expected by the MiSTer FPGA NeoGeo core.
 
 Originally written by **Aluzed** in 2020 as a single-file script
 (`generator.py`). This repository now ships a packaged CLI, `darksoft-gen`,
@@ -33,8 +33,8 @@ pipx install ./MiSTer-Neogeo-Rom-Decrypter
 
 ## Quickstart
 
-1. Unzip a decrypted NeoRageX / MAME romset into a folder named after the
-   Darksoft short-name of the game (e.g. `2020bb/`, `mslug/`, `aof3/` — see
+1. Unzip a decrypted NeoRageX romset into a folder named after the Darksoft
+   short-name of the game (e.g. `2020bb/`, `mslug/`, `aof3/` — see
    `romset.sample.xml` for the full list).
 2. `cd` into that folder.
 3. Run `darksoft-gen`.
@@ -109,10 +109,13 @@ darksoft-gen [--dir PATH] [--game NAME] [--smdb PATH] [--out PATH]
 | `--no-fpga`   | off                            | Skip writing the `fpga` file.                                   |
 | `--no-verify` | off                            | Skip the SMDB comparison step.                                  |
 
-Supported ROM filename conventions:
+Detected ROM filename conventions (from the original 2020 regex):
 
-* MAME:     `<game>-s1.rom`, `<game>_p1.bin`, `<game>-c2.rom`, ...
-* NeoRageX: `<game>.s1`, `<game>.p1`, `<game>.c2`, ...
+* NeoRageX: `<game>.s1`, `<game>.p1`, `<game>.c2`, ... — **tested, known
+  to work.**
+* MAME:     `<game>-s1.rom`, `<game>_p1.bin`, `<game>-c2.rom`, ... — the
+  regex also matches this layout, but the MAME → Darksoft path has not
+  been validated end-to-end. Use at your own risk.
 
 ## As a library
 

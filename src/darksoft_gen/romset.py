@@ -4,9 +4,13 @@ Replicates the file-detection logic of the original ``generator.py`` —
 specifically the two-loop scan inside ``convert_roms``, with the same regex
 patterns applied in the same order.
 
-Supported naming conventions:
-  * MAME-style:     ``<name>-s1.rom``, ``<name>_p1.bin``, ``<name>-c2.rom`` ...
-  * NeoRageX-style: ``<name>.s1``, ``<name>.p1``, ``<name>.c2`` ...
+Naming conventions matched by the regex (inherited from the 2020 original):
+  * NeoRageX-style: ``<name>.s1``, ``<name>.p1``, ``<name>.c2`` ... — the
+    workflow validated end-to-end against real Darksoft hardware.
+  * MAME-style:     ``<name>-s1.rom``, ``<name>_p1.bin``, ``<name>-c2.rom``
+    ... — matched by the regex but the MAME → Darksoft output pipeline
+    has not been empirically verified. No guarantee it produces a
+    playable romset.
 
 Iso-behavior quirks preserved from the original (do not "fix" these without
 coordination — see project memory "iso-behavior"):
