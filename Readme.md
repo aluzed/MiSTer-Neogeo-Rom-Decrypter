@@ -1,4 +1,4 @@
-# Darksoft Neogeo Rom generator for MiSTer-FPGA
+# Darksoft Neogeo Rom generator for MiSTer-FPGA by Aluzed
 
 Convert a MAME (or NeoRageX) NeoGeo romset into the Darksoft format expected by
 the MiSTer FPGA NeoGeo core.
